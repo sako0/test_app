@@ -1,0 +1,4 @@
+<%= form_with scarp: :tweet, url: tweets_path, method: "post" do |f| %>
+  <%= f.text_field :text, cols: 40, rows: 5, maxlength: 140 %>
+  <%= f.submit '保存' %>
+<% end %>

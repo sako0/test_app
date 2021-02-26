@@ -1,0 +1,75 @@
+---
+facebook.com:
+  "/":
+    datr: !ruby/object:Mechanize::Cookie
+      name: datr
+      value: 7Rc4YAWlZhtpSumestNfU1V5
+      domain: facebook.com
+      for_domain: true
+      path: "/"
+      secure: true
+      httponly: true
+      expires: Sat, 25 Feb 2023 21:34:37 GMT
+      max_age: 
+      created_at: 2021-02-25 21:34:37.819361600 +00:00
+      accessed_at: &1 2021-02-25 21:34:39.156065600 +00:00
+    noscript: !ruby/object:Mechanize::Cookie
+      name: noscript
+      value: '1'
+      domain: facebook.com
+      for_domain: true
+      path: "/"
+      secure: true
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2021-02-25 21:34:39.152826300 +00:00
+      accessed_at: *1
+    fr: !ruby/object:Mechanize::Cookie
+      name: fr
+      value: 119EaT1NWoj51zWWz.AWVE5ubeSsRJ1rmrlQtfR-TVp20.BgOBfu.MN.AAA.0.0.BgOBfu.AWWAhA1ZIRU
+      domain: facebook.com
+      for_domain: true
+      path: "/"
+      secure: true
+      httponly: true
+      expires: Wed, 26 May 2021 21:34:37 GMT
+      max_age: 
+      created_at: 2021-02-25 21:34:39.153319900 +00:00
+      accessed_at: *1
+    sb: !ruby/object:Mechanize::Cookie
+      name: sb
+      value: 7hc4YI68YbSoBwdMq7gQekqe
+      domain: facebook.com
+      for_domain: true
+      path: "/"
+      secure: true
+      httponly: true
+      expires: Sat, 25 Feb 2023 21:34:39 GMT
+      max_age: 
+      created_at: 2021-02-25 21:34:39.153863100 +00:00
+      accessed_at: *1
+    c_user: !ruby/object:Mechanize::Cookie
+      name: c_user
+      value: '100064055260096'
+      domain: facebook.com
+      for_domain: true
+      path: "/"
+      secure: true
+      httponly: false
+      expires: Fri, 25 Feb 2022 21:34:38 GMT
+      max_age: 
+      created_at: 2021-02-25 21:34:39.154211800 +00:00
+      accessed_at: *1
+    xs: !ruby/object:Mechanize::Cookie
+      name: xs
+      value: 47%3ATK0RAcOAfDHXUQ%3A2%3A1614288878%3A-1%3A-1
+      domain: facebook.com
+      for_domain: true
+      path: "/"
+      secure: true
+      httponly: true
+      expires: Fri, 25 Feb 2022 21:34:38 GMT
+      max_age: 
+      created_at: 2021-02-25 21:34:39.154557600 +00:00
+      accessed_at: *1
