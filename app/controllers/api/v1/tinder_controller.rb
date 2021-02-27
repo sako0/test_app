@@ -5,6 +5,7 @@ require 'selenium-webdriver'
 require 'capybara'
 require 'capybara/dsl'
 require "aws-sdk"
+require 'aws-sdk-s3'
 
 Capybara.configure do |config|
   config.server_host = :host
@@ -20,9 +21,13 @@ Capybara.register_driver :remote_chrome do |app|
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--window-size=1680,1050')
 
-  Aws.config[:region] = "ap-northeast-1" # AP対応まだです?
-  Aws.config[:access_key_id] = ENV['ACCESS_KEY_ID']
-  Aws.config[:secret_access_key] = ENV['SECRET_ACCESS_KEY']
+  # Aws.config[:region] = "ap-northeast-1"
+  # Aws.config[:access_key_id] = ENV['ACCESS_KEY_ID']
+  # Aws.config[:secret_access_key] = ENV['SECRET_ACCESS_KEY']
+
+  Aws.config.update({
+                      credentials: Aws::Credentials.new(ENV['ACCESS_KEY_ID'], ENV['SECRET_ACCESS_KEY'])
+                    })
 
   Capybara::Selenium::Driver.new(
     app,
@@ -84,7 +89,11 @@ class Api::V1::TinderController < ApplicationController
     res = http.get(uri.path, api_headers)
     res_body = JSON.parse(res.body)
     res_body['results'].each do |result|
-      get_image(result['photos'][0]['processedFiles'][0]['url'], result['photos'][0]['id'])
+      file_path = result['photos'][0]['processedFiles'][0]['url']
+      file_name = get_image(file_path, result['photos'][0]['id'])
+      object_uploaded(file_name)
+      p file_name
+      p compare_images(file_name, "target1.jpg")
     end
     render json: res_body
   end
@@ -109,6 +118,42 @@ class Api::V1::TinderController < ApplicationController
         pass.write(recieve.read)
       end
     end
+    prefix_str + '.jpg'
+  end
+
+  # Rekognitionで画像の比較
+  def compare_images(src_keyname, target_keyname)
+    rekog = Aws::Rekognition::Client.new(region: "ap-northeast-1", access_key_id: ENV['ACCESS_KEY_ID'],
+                                         secret_access_key: ENV['SECRET_ACCESS_KEY'])
+    begin
+      response = rekog.compare_faces({
+                                       source_image: { 's3_object': {
+                                         bucket: ENV['S3_BUCKETS_NAME'],
+                                         name: src_keyname,
+                                       } },
+                                       target_image: { 's3_object': {
+                                         bucket: ENV['S3_BUCKETS_NAME'],
+                                         name: target_keyname,
+                                       } },
+                                       similarity_threshold: 1.0
+                                     })
+      response['face_matches'][0]['similarity']
+    rescue
+      0
+    end
+  end
+
+  # S3にuploadしローカルに一時的に保存した画像を削除する
+  def object_uploaded(file_name)
+    s3resoruce = Aws::S3::Resource.new(
+      access_key_id: ENV['ACCESS_KEY_ID'],
+      secret_access_key: ENV['SECRET_ACCESS_KEY'],
+      region: "ap-northeast-1",
+    )
+    local_file_path = '/myapp/images/' + file_name
+    s3resoruce.bucket(ENV['S3_BUCKETS_NAME']).object(file_name).upload_file(local_file_path)
+    File.delete(local_file_path)
+    file_name
   end
 end
 
