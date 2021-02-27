@@ -124,3 +124,5 @@ tmp/*
 .idea/*
 vendor/*
 images/*
+
+.env

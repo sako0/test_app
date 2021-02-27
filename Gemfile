@@ -28,6 +28,9 @@ gem 'nokogiri'
 gem 'mechanize'
 gem 'capybara', '>= 3.26'
 gem 'selenium-webdriver'
+gem "aws-sdk"
+gem "aws-sdk-s3"
+gem 'dotenv-rails'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
