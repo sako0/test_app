@@ -92,7 +92,7 @@ class Api::V1::TinderController < ApplicationController
     api_response = JSON.parse(res.body)
     p api_response
     tinder_token = api_response['data']['api_token']
-    update_finish = Tinder.update(1, access_token: tinder_token)
+    Tinder.update(1, access_token: tinder_token)
     render json: "success"
   end
 
@@ -127,6 +127,8 @@ class Api::V1::TinderController < ApplicationController
             end
             object_delete(file_name)
           end
+          # 成功したため、iを初期化する
+          i = 0
         else
           if i < 4
             p "再検索します"
