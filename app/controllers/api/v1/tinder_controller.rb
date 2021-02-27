@@ -78,24 +78,37 @@ class Api::V1::TinderController < ApplicationController
   end
 
   def index
-    uri = URI.parse('https://api.gotinder.com/user/recs')
-    api_headers = {
-      'X-Auth-Token' => '999f6ab2-2ce2-48f3-a4a9-be8cdc5517fa',
-      'Content-type' => 'application/json',
-      'User-agent' => 'Tinder/3.0.4 (iPhone; iOS 7.1; Scale/2.00)'
-    }
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    res = http.get(uri.path, api_headers)
-    res_body = JSON.parse(res.body)
-    res_body['results'].each do |result|
-      file_path = result['photos'][0]['processedFiles'][0]['url']
-      file_name = get_image(file_path, result['photos'][0]['id'])
-      object_uploaded(file_name)
-      p file_name
-      p compare_images(file_name, "target1.jpg")
+    loop do
+      uri = URI.parse('https://api.gotinder.com/user/recs')
+      @api_headers = {
+        'X-Auth-Token' => '999f6ab2-2ce2-48f3-a4a9-be8cdc5517fa',
+        'Content-type' => 'application/json',
+        'User-agent' => 'Tinder/3.0.4 (iPhone; iOS 7.1; Scale/2.00)'
+      }
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      res = http.get(uri.path, @api_headers)
+      res_body = JSON.parse(res.body)
+      if res_body['results']
+        res_body['results'].each do |result|
+          file_path = result['photos'][0]['processedFiles'][0]['url']
+          file_name = get_image(file_path, result['photos'][0]['id'])
+          object_uploaded(file_name)
+          similar = compare_images(file_name, "target1.jpg")
+          if similar > 20
+            like_user(result['_id'])
+            p "条件に一致したためいいねしました => " + result['_id'] + "  マッチ率は" + similar.to_s + "%です"
+          else
+            pass_user(result['_id'])
+            p "pass => " + result['_id']
+          end
+          object_delete(file_name)
+        end
+      else
+        p "再検索します"
+      end
     end
-    render json: res_body
+    render json: "終了"
   end
 
   private
@@ -154,6 +167,37 @@ class Api::V1::TinderController < ApplicationController
     s3resoruce.bucket(ENV['S3_BUCKETS_NAME']).object(file_name).upload_file(local_file_path)
     File.delete(local_file_path)
     file_name
+  end
+
+  def object_delete(file_name)
+    s3resoruce = Aws::S3::Resource.new(
+      access_key_id: ENV['ACCESS_KEY_ID'],
+      secret_access_key: ENV['SECRET_ACCESS_KEY'],
+      region: "ap-northeast-1",
+    )
+    s3resoruce.bucket(ENV['S3_BUCKETS_NAME']).object(file_name).delete
+  end
+
+  # userにいいねを行う
+  def like_user(uid)
+    uri = URI.parse('https://api.gotinder.com/like/' + uid)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    res = http.get(uri.path, @api_headers)
+    response_body = JSON.parse(res.body)
+    if response_body['match'] == true
+      true
+    else
+      false
+    end
+  end
+
+  # userをpassする
+  def pass_user(uid)
+    uri = URI.parse('https://api.gotinder.com/pass/' + uid)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.get(uri.path, @api_headers)
   end
 end
 
