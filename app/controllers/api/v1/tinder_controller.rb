@@ -40,10 +40,10 @@ Capybara.javascript_driver = :remote_chrome
 
 class Api::V1::TinderController < ApplicationController
   include Capybara::DSL
-
+  # アクセストークンを取得する api/v1/tinder/new
   def new
-    aaa = "https://www.facebook.com/v3.2/dialog/oauth?redirect_uri=fb464891386855067%3A%2F%2Fauthorize%2F&scope=user_birthday%2Cuser_photos%2Cuser_education_history%2Cemail%2Cuser_relationship_details%2Cuser_friends%2Cuser_work_history%2Cuser_likes&response_type=token%2Csigned_request&client_id=464891386855067&ret=login&fallback_redirect_uri=221e1158-f2e9-1452-1a05-8983f99f7d6e&ext=1556057433&hash=Aea6jWwMP_tDMQ9y"
-    start_scraping aaa do
+    facebook_url = "https://www.facebook.com/v3.2/dialog/oauth?redirect_uri=fb464891386855067%3A%2F%2Fauthorize%2F&scope=user_birthday%2Cuser_photos%2Cuser_education_history%2Cemail%2Cuser_relationship_details%2Cuser_friends%2Cuser_work_history%2Cuser_likes&response_type=token%2Csigned_request&client_id=464891386855067&ret=login&fallback_redirect_uri=221e1158-f2e9-1452-1a05-8983f99f7d6e&ext=1556057433&hash=Aea6jWwMP_tDMQ9y"
+    start_scraping facebook_url do
       # ここにスクレイピングのコードを書く
       fill_in "email", with: ENV['FB_EMAIL']
       fill_in "pass", with: ENV['FB_PASS']
@@ -52,10 +52,28 @@ class Api::V1::TinderController < ApplicationController
       else
         click_button('すべて許可')
       end
-      find("#loginbutton").click
-      click_button('OK')
+      # ログインボタンクリック
+      3.times do |i|
+        sleep 2
+        begin
+          find("#loginbutton").click
+          break
+        rescue
+          p 'waitting....'
+        end
+      end
+      # クッキー承諾ボタンクリック
+      3.times do |i|
+        sleep 2
+        begin
+          # save_screenshot "ss.png"
+          click_button('OK')
+          break
+        rescue
+          p 'waitting....'
+        end
+      end
       access_token_html = html
-      p html
       str = access_token_html.to_s
       idx = str.index("&access_token=")
       end_idx = str.index("&data_access_expiration_time=")
@@ -74,38 +92,60 @@ class Api::V1::TinderController < ApplicationController
     api_response = JSON.parse(res.body)
     p api_response
     tinder_token = api_response['data']['api_token']
-    render json: tinder_token
+    update_finish = Tinder.update(1, access_token: tinder_token)
+    render json: "success"
   end
 
+  # 画像比較処理ループ api/v1/tinder
   def index
+    i = 0
+    @tinder = Tinder.find(1)
+    uri = URI.parse('https://api.gotinder.com/user/recs')
+    @api_headers = {
+      'X-Auth-Token' => @tinder.access_token,
+      'Content-type' => 'application/json',
+      'User-agent' => 'Tinder/3.0.4 (iPhone; iOS 7.1; Scale/2.00)'
+    }
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
     loop do
-      uri = URI.parse('https://api.gotinder.com/user/recs')
-      @api_headers = {
-        'X-Auth-Token' => '999f6ab2-2ce2-48f3-a4a9-be8cdc5517fa',
-        'Content-type' => 'application/json',
-        'User-agent' => 'Tinder/3.0.4 (iPhone; iOS 7.1; Scale/2.00)'
-      }
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      res = http.get(uri.path, @api_headers)
-      res_body = JSON.parse(res.body)
-      if res_body['results']
-        res_body['results'].each do |result|
-          file_path = result['photos'][0]['processedFiles'][0]['url']
-          file_name = get_image(file_path, result['photos'][0]['id'])
-          object_uploaded(file_name)
-          similar = compare_images(file_name, "target1.jpg")
-          if similar > 20
-            like_user(result['_id'])
-            p "条件に一致したためいいねしました => " + result['_id'] + "  マッチ率は" + similar.to_s + "%です"
-          else
-            pass_user(result['_id'])
-            p "pass => " + result['_id']
+      begin
+        res = http.get(uri.path, @api_headers)
+        res_body = JSON.parse(res.body)
+        if res_body['results']
+          res_body['results'].each do |result|
+            file_path = result['photos'][0]['processedFiles'][0]['url']
+            file_name = get_image(file_path, result['photos'][0]['id'])
+            object_uploaded(file_name)
+            similar = compare_images(file_name, "target1.jpg")
+            if similar > 20
+              like_user(result['_id'])
+              p "条件に一致したためいいねしました => " + result['_id'] + "  マッチ率は" + similar.to_s + "%です"
+            else
+              pass_user(result['_id'])
+              p "pass => " + result['_id']
+            end
+            object_delete(file_name)
           end
-          object_delete(file_name)
+        else
+          if i < 4
+            p "再検索します"
+            p (i + 1).to_s + "回目の再検索です"
+            i += 1
+          else
+            raise
+          end
         end
-      else
-        p "再検索します"
+      rescue
+        # 3回連続で失敗した場合は終了
+        if i < 4
+          i += 1
+          p (i + 1).to_s + "回目の処理失敗です"
+          retry
+        else
+          p i.to_s + "回処理が失敗しました。プログラムを終了します。"
+          raise
+        end
       end
     end
     render json: "終了"
