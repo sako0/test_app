@@ -8,13 +8,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: deploy
     # 保存したシークレットたちを環境変数に設定
-    env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EC2_USER: ${{ secrets.EC2_USER }}
-      EC2_HOST: ${{ secrets.EC2_HOST }}
-      run: |
-        echo "${SECRET_KEY}" > secret_key
-        chmod 600 secret_key
-        ssh -oStrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} -i secret_key "git pull"
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+            echo "${SECRET_KEY}" > secret_key
+            chmod 600 secret_key
+            ssh -oStrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} -i secret_key "git pull"
