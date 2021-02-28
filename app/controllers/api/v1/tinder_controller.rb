@@ -123,9 +123,14 @@ def new
       3.times do |i|
         sleep 2
         begin
-          find("#loginbutton").click
-          save_screenshot "ss.png"
-          break
+          if has_button?("loginbutton")
+            find("#loginbutton").click
+            save_screenshot "ss.png"
+            break
+          else
+            click_button('Log In')
+            break
+          end
         rescue
           p 'waitting....'
         end
