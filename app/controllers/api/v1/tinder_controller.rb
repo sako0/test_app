@@ -113,6 +113,7 @@ def new
       # ここにスクレイピングのコードを書く
       fill_in "email", with: ENV['FB_EMAIL']
       fill_in "pass", with: ENV['FB_PASS']
+      save_screenshot "ss.png"
       if has_button?("Accept All")
         click_button('Accept All')
       else
@@ -123,6 +124,7 @@ def new
         sleep 2
         begin
           find("#loginbutton").click
+          save_screenshot "ss.png"
           break
         rescue
           p 'waitting....'
@@ -132,7 +134,7 @@ def new
       3.times do |i|
         sleep 2
         begin
-          # save_screenshot "ss.png"
+          save_screenshot "ss.png"
           click_button('OK')
           break
         rescue
