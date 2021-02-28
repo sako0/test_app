@@ -121,10 +121,10 @@ def new
       end
       # ログインボタンクリック
       3.times do |i|
-        sleep 2
+        sleep 4
         begin
           if has_button?("loginbutton")
-            find("#loginbutton").click
+            click_button('loginbutton')
             save_screenshot "ss.png"
             break
           else
@@ -137,7 +137,7 @@ def new
       end
       # クッキー承諾ボタンクリック
       3.times do |i|
-        sleep 2
+        sleep 4
         begin
           save_screenshot "ss.png"
           click_button('OK')
