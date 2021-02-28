@@ -116,8 +116,10 @@ def new
       save_screenshot "ss.png"
       if has_button?("Accept All")
         click_button('Accept All')
-      else
+      elsif has_button?("すべて許可")
         click_button('すべて許可')
+      else
+        save_screenshot "ss.png"
       end
       # ログインボタンクリック
       3.times do |i|
