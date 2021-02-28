@@ -6,5 +6,5 @@ Rails.application.routes.draw do
       resources :tinder
     end
   end
-
+  post '/callback' => 'api/v1/tinder#callback'
 end
