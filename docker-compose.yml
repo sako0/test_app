@@ -23,10 +23,11 @@ services:
     command: --default-authentication-plugin=mysql_native_password
   web:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bundle exec pumactl start
     volumes:
       - .:/myapp
       - /myapp/node_modules
+      - ./tmp:/myapp/tmp
     ports:
       - "3000:3000"
     stdin_open: true
@@ -44,3 +45,11 @@ services:
     image: selenium/standalone-chrome:latest
     ports:
       - 4444:4444
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./tmp:/myapp/tmp
+    ports:
+      - 80:80
+    depends_on:
+      - web
