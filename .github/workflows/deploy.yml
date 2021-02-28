@@ -16,7 +16,7 @@ jobs:
       EC2_HOST: ${{ secrets.EC2_HOST }}
       run:
         # 秘密鍵にファイル名secret_keyをつける
-        echo "$SECRET_KEY" > secret_key
+        echo "${SECRET_KEY}" > secret_key
         # パーミッションの変更
         chmod 600 secret_key
         # ssh接続　＞　デプロイするディレクトリに行く　＞　デプロイ
