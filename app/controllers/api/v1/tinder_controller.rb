@@ -195,28 +195,32 @@ def index
       res_body = JSON.parse(res.body)
       if res_body['results']
         res_body['results'].each do |result|
-          #   file_path = result['photos'][0]['processedFiles'][0]['url']
-          #   file_name = get_image(file_path, result['photos'][0]['id'])
-          #   object_uploaded(file_name)
-          #   similar = compare_images(file_name, "target1.jpg")
-          #   if similar > 20
-          today = Date.today.strftime("%Y%m%d").to_i
-          birth_date = Date.parse(result['birth_date']).strftime("%Y%m%d").to_i
-          age_f = (today - birth_date) / 10000
-          age = age_f.to_i
-          if age < 29
+          file_path = result['photos'][0]['processedFiles'][0]['url']
+          file_name = get_image(file_path, result['photos'][0]['id'])
+          object_uploaded(file_name)
+          similar = compare_images(file_name, "target1.jpg")
+          if similar > 20
+
+            # today = Date.today.strftime("%Y%m%d").to_i
+            # birth_date = Date.parse(result['birth_date']).strftime("%Y%m%d").to_i
+            # age_f = (today - birth_date) / 10000
+            # age = age_f.to_i
+            # if age < 29
+            #   like_user(result['_id'])
+            #   p "いいねしました => [" + result['_id'] + "] " + age.to_s + "歳"
+
             like_user(result['_id'])
-            p "いいねしました => [" + result['_id'] + "] " + age.to_s + "歳"
-            #     p "条件に一致したためいいねしました => " + result['_id'] + "  マッチ率は" + similar.to_s + "%です"
-            #   else
+            p "条件に一致したためいいねしました => " + result['_id'] + "  マッチ率は" + similar.to_s + "%です"
           else
+            # else
+            #   pass_user(result['_id'])
+            #   p "pass => " + result['_id']
             pass_user(result['_id'])
             p "pass => " + result['_id']
-            #     p "pass => " + result['_id']
-            #   end
-            #   object_delete(file_name)
           end
+          object_delete(file_name)
         end
+
         # 成功したため、iを初期化する
         i = 0
       else
@@ -246,6 +250,7 @@ def index
       end
     end
   end
+
   render json: "終了"
 end
 
