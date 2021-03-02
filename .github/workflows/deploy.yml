@@ -13,7 +13,7 @@ jobs:
       CHROME_REPOSITORY: chrome
       IMAGE_TAG: latest
       WEB_CONTAINER_NAME: test_app_web
-      CHROME_CONTAINER_NAME: test_app_chrome
+      CHROME_CONTAINER_NAME: selenium/standalone-chrome:latest
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
@@ -40,8 +40,8 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       - name: Chrome, Build, tag, and push image to Amazon ECR # ECRイメージPush
         run: |
-          docker tag $CHROME_CONTAINER_NAME 663382292879.dkr.ecr.ap-northeast-1.amazonaws.com/chrome:latest
-          docker push 663382292879.dkr.ecr.ap-northeast-1.amazonaws.com/chrome:latest
+          docker tag $CHROME_CONTAINER_NAME $ECR_REGISTRY/$CHROME_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$CHROME_REPOSITORY:$IMAGE_TAG
       - name: Render migration task definition # ECSタスク定義ファイルレンダリング
         id: render-migration-web-container
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -62,7 +62,7 @@ jobs:
         with:
           task-definition: ${{ steps.render-migration-web-container.outputs.task-definition }}
           container-name: chrome
-          image: 663382292879.dkr.ecr.ap-northeast-1.amazonaws.com/chrome:latest
+          image: $ECR_REGISTRY/$CHROME_REPOSITORY:$IMAGE_TAG
       - name: Deploy to Amazon ECS service # ECSサービスデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
