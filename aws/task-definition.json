@@ -91,7 +91,7 @@
       "memoryReservation": 300,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "663382292879.dkr.ecr.ap-northeast-1.amazonaws.com/web",
+      "image": "663382292879.dkr.ecr.ap-northeast-1.amazonaws.com/web:latest",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": [
@@ -263,7 +263,7 @@
       "memoryReservation": 300,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "663382292879.dkr.ecr.ap-northeast-1.amazonaws.com/chrome",
+      "image": "663382292879.dkr.ecr.ap-northeast-1.amazonaws.com/chrome:latest",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": [
