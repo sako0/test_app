@@ -290,12 +290,12 @@
   ],
   "placementConstraints": [],
   "memory": "2048",
-  "taskRoleArn": null,
+  "taskRoleArn": "arn:aws:iam::663382292879:role/ecsTaskExecutionRole",
   "compatibilities": [
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:663382292879:task-definition/koikatsu:2",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:663382292879:task-definition/koikatsu:4",
   "family": "koikatsu",
   "requiresAttributes": [
     {
@@ -327,6 +327,12 @@
       "targetType": null,
       "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
     },
     {
       "targetId": null,
@@ -365,7 +371,7 @@
   ],
   "networkMode": "awsvpc",
   "cpu": "512",
-  "revision": 2,
+  "revision": 4,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
