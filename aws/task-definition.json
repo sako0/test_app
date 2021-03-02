@@ -41,6 +41,10 @@
         {
           "name": "RAILS_DB_USER",
           "value": "root"
+        },
+        {
+          "name": "CHROME_HOST_NAME",
+          "value": "http://localhost:4444/wd/hub"
         }
       ],
       "resourceRequirements": null,
