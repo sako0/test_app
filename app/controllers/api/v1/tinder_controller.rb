@@ -191,8 +191,11 @@ class Api::V1::TinderController < ApplicationController
           if res_body['results']
             res_body['results'].each do |result|
               file_path = result['photos'][0]['processedFiles'][0]['url']
+              p "get_image前"
               file_name = get_image(file_path, result['photos'][0]['id'])
+              p "object_uploaded前"
               object_uploaded(file_name)
+              p "compare_images前"
               similar = compare_images(file_name, "target1.jpg")
               if similar > 20
                 # today = Date.today.strftime("%Y%m%d").to_i
@@ -202,8 +205,9 @@ class Api::V1::TinderController < ApplicationController
                 # if age < 29
                 #   like_user(result['_id'])
                 #   p "いいねしました => [" + result['_id'] + "] " + age.to_s + "歳"
-
+                p "like_user前"
                 like_user(result['_id'])
+                p "similar_i前"
                 similar_i = similar.to_i
                 p "条件に一致したためいいねしました => " + result['_id'] + "  マッチ率は" + similar_i.to_s + "%です"
                 push(result['name'] + "さんをいいねした！マッチ率は" + similar_i.to_s + "%だった！")

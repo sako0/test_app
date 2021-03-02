@@ -123,6 +123,5 @@ dist
 tmp/*
 .idea/*
 vendor/*
-images/*
 
 .env

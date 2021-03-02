@@ -27,6 +27,10 @@
       "cpu": 0,
       "environment": [
         {
+          "name": "CHROME_HOST_NAME",
+          "value": "http://localhost:4444/wd/hub"
+        },
+        {
           "name": "RAILS_DB_HOST",
           "value": "koikatsu-db.cdzfxn5twenh.ap-northeast-1.rds.amazonaws.com"
         },
@@ -41,10 +45,6 @@
         {
           "name": "RAILS_DB_USER",
           "value": "root"
-        },
-        {
-          "name": "CHROME_HOST_NAME",
-          "value": "http://localhost:4444/wd/hub"
         }
       ],
       "resourceRequirements": null,
@@ -58,24 +58,20 @@
           "name": "ACCESS_KEY_ID"
         },
         {
-          "valueFrom": "SECRET_ACCESS_KEY",
-          "name": "SECRET_ACCESS_KEY"
-        },
-        {
           "valueFrom": "FB_EMAIL",
           "name": "FB_EMAIL"
-        },
-        {
-          "valueFrom": "FB_PASS",
-          "name": "FB_PASS"
         },
         {
           "valueFrom": "FB_ID",
           "name": "FB_ID"
         },
         {
-          "valueFrom": "S3_BUCKETS_NAME",
-          "name": "S3_BUCKETS_NAME"
+          "valueFrom": "FB_PASS",
+          "name": "FB_PASS"
+        },
+        {
+          "valueFrom": "LINE_CHANNEL_ID",
+          "name": "LINE_CHANNEL_ID"
         },
         {
           "valueFrom": "LINE_CHANNEL_SECRET",
@@ -86,8 +82,12 @@
           "name": "LINE_CHANNEL_TOKEN"
         },
         {
-          "valueFrom": "LINE_CHANNEL_ID",
-          "name": "LINE_CHANNEL_ID"
+          "valueFrom": "S3_BUCKETS_NAME",
+          "name": "S3_BUCKETS_NAME"
+        },
+        {
+          "valueFrom": "SECRET_ACCESS_KEY",
+          "name": "SECRET_ACCESS_KEY"
         }
       ],
       "dockerSecurityOptions": null,
@@ -149,6 +149,10 @@
       "cpu": 0,
       "environment": [
         {
+          "name": "CHROME_HOST_NAME",
+          "value": "http://localhost:4444/wd/hub"
+        },
+        {
           "name": "RAILS_DB_HOST",
           "value": "koikatsu-db.cdzfxn5twenh.ap-northeast-1.rds.amazonaws.com"
         },
@@ -176,24 +180,20 @@
           "name": "ACCESS_KEY_ID"
         },
         {
-          "valueFrom": "SECRET_ACCESS_KEY",
-          "name": "SECRET_ACCESS_KEY"
-        },
-        {
           "valueFrom": "FB_EMAIL",
           "name": "FB_EMAIL"
-        },
-        {
-          "valueFrom": "FB_PASS",
-          "name": "FB_PASS"
         },
         {
           "valueFrom": "FB_ID",
           "name": "FB_ID"
         },
         {
-          "valueFrom": "S3_BUCKETS_NAME",
-          "name": "S3_BUCKETS_NAME"
+          "valueFrom": "FB_PASS",
+          "name": "FB_PASS"
+        },
+        {
+          "valueFrom": "LINE_CHANNEL_ID",
+          "name": "LINE_CHANNEL_ID"
         },
         {
           "valueFrom": "LINE_CHANNEL_SECRET",
@@ -204,8 +204,12 @@
           "name": "LINE_CHANNEL_TOKEN"
         },
         {
-          "valueFrom": "LINE_CHANNEL_ID",
-          "name": "LINE_CHANNEL_ID"
+          "valueFrom": "S3_BUCKETS_NAME",
+          "name": "S3_BUCKETS_NAME"
+        },
+        {
+          "valueFrom": "SECRET_ACCESS_KEY",
+          "name": "SECRET_ACCESS_KEY"
         }
       ],
       "dockerSecurityOptions": null,
@@ -299,7 +303,7 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:663382292879:task-definition/koikatsu:4",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:663382292879:task-definition/koikatsu:10",
   "family": "koikatsu",
   "requiresAttributes": [
     {
@@ -375,7 +379,7 @@
   ],
   "networkMode": "awsvpc",
   "cpu": "512",
-  "revision": 4,
+  "revision": 10,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
