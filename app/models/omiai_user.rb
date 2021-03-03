@@ -1,0 +1,2 @@
+class OmiaiUser < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class OmiaiToken < ApplicationRecord
+end

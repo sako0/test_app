@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   namespace :api, format: 'json' do
     namespace :v1 do
       resources :tinder
+      resources :omiai
     end
   end
   post '/callback' => 'api/v1/tinder#callback'
+  post '/omiai/callback' => 'api/v1/omiai#callback'
 end

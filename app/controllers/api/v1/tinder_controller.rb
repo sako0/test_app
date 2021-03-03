@@ -197,7 +197,7 @@ class Api::V1::TinderController < ApplicationController
               object_uploaded(file_name)
               p "compare_images前"
               similar = compare_images(file_name, "target1.jpg")
-              if similar > 20
+              if similar > 7
                 # today = Date.today.strftime("%Y%m%d").to_i
                 # birth_date = Date.parse(result['birth_date']).strftime("%Y%m%d").to_i
                 # age_f = (today - birth_date) / 10000
@@ -249,7 +249,7 @@ class Api::V1::TinderController < ApplicationController
       render json: "終了"
     rescue
       p "====処理が中断されました===="
-      push("現在処理が止まってるよ！「起動」ボタンで再起動できるよ！")
+      push("現在処理が止まってるよ！アクセストークンの有効期限が終わったのかも！")
       return false
     end
   end

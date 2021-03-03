@@ -82,6 +82,18 @@
           "name": "LINE_CHANNEL_TOKEN"
         },
         {
+          "valueFrom": "LINE_OMIAI_CHANNEL_ID",
+          "name": "LINE_OMIAI_CHANNEL_ID"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_CHANNEL_SECRET",
+          "name": "LINE_OMIAI_CHANNEL_SECRET"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_CHANNEL_TOKEN",
+          "name": "LINE_OMIAI_CHANNEL_TOKEN"
+        },
+        {
           "valueFrom": "S3_BUCKETS_NAME",
           "name": "S3_BUCKETS_NAME"
         },
@@ -141,9 +153,7 @@
       ],
       "command": [
         "rails",
-        "db:migrate:reset",
-        "db:seed",
-        "RAILS_ENV=development"
+        "db:migrate"
       ],
       "linuxParameters": null,
       "cpu": 0,
@@ -202,6 +212,18 @@
         {
           "valueFrom": "LINE_CHANNEL_TOKEN",
           "name": "LINE_CHANNEL_TOKEN"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_CHANNEL_ID",
+          "name": "LINE_OMIAI_CHANNEL_ID"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_CHANNEL_SECRET",
+          "name": "LINE_OMIAI_CHANNEL_SECRET"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_CHANNEL_TOKEN",
+          "name": "LINE_OMIAI_CHANNEL_TOKEN"
         },
         {
           "valueFrom": "S3_BUCKETS_NAME",
