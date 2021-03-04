@@ -1,0 +1,2 @@
+module OmiaiLikeHelper
+end

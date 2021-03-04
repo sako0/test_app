@@ -1,11 +1,7 @@
-require 'net/https'
-require 'open-uri'
 require 'mechanize'
 require 'selenium-webdriver'
 require 'capybara'
 require 'capybara/dsl'
-require "aws-sdk"
-require 'aws-sdk-s3'
 require 'line/bot'
 
 Capybara.configure do |config|
@@ -22,9 +18,9 @@ Capybara.register_driver :remote_chrome do |app|
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--window-size=1680,1050')
 
-  Aws.config.update({
-                      credentials: Aws::Credentials.new(ENV['ACCESS_KEY_ID'], ENV['SECRET_ACCESS_KEY'])
-                    })
+  # Aws.config.update({
+  #                     credentials: Aws::Credentials.new(ENV['ACCESS_KEY_ID'], ENV['SECRET_ACCESS_KEY'])
+  #                   })
 
   Capybara::Selenium::Driver.new(
     app,
@@ -41,7 +37,7 @@ class Api::V1::TinderController < ApplicationController
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
-
+  # Tinderツールline_botのクライアント
   def client
     @client ||= Line::Bot::Client.new { |config|
       config.channel_id = ENV["LINE_CHANNEL_ID"]
@@ -69,10 +65,6 @@ class Api::V1::TinderController < ApplicationController
         'Bad Request'
       end
     end
-    @line_header = {
-      'Authorization' => "Bearer " + ENV['LINE_CHANNEL_TOKEN'],
-      'Content-type' => 'application/json',
-    }
     events = client.parse_events_from(@body)
     events.each do |event|
       case event
@@ -80,8 +72,10 @@ class Api::V1::TinderController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           if event['message']['text'] == "起動"
-            push("「起動」が押された！")
+            a = push"「起動」が押された！"
+            p a
             index
+            render json: :ok
           end
           if event['message']['text'] == "アクセストークン"
             push("「アクセストークンの取得」が押された！")
@@ -197,7 +191,7 @@ class Api::V1::TinderController < ApplicationController
               object_uploaded(file_name)
               p "compare_images前"
               similar = compare_images(file_name, "target1.jpg")
-              if similar > 7
+              if similar > 20
                 # today = Date.today.strftime("%Y%m%d").to_i
                 # birth_date = Date.parse(result['birth_date']).strftime("%Y%m%d").to_i
                 # age_f = (today - birth_date) / 10000
@@ -262,63 +256,6 @@ class Api::V1::TinderController < ApplicationController
       session.visit url
       session.instance_eval(&block)
     }
-  end
-
-  # 画像をローカルに保存する
-  def get_image(url, prefix)
-    prefix_str = prefix.to_s
-    file = '/myapp/images/' + prefix_str + '.jpg'
-    # 取得した画像URLから画像をダウンロードする
-    File.open(file, 'w+b') do |pass|
-      OpenURI.open_uri(url) do |recieve|
-        pass.write(recieve.read)
-      end
-    end
-    prefix_str + '.jpg'
-  end
-
-  # Rekognitionで画像の比較
-  def compare_images(src_keyname, target_keyname)
-    rekog = Aws::Rekognition::Client.new(region: "ap-northeast-1", access_key_id: ENV['ACCESS_KEY_ID'],
-                                         secret_access_key: ENV['SECRET_ACCESS_KEY'])
-    begin
-      response = rekog.compare_faces({
-                                       source_image: { 's3_object': {
-                                         bucket: ENV['S3_BUCKETS_NAME'],
-                                         name: src_keyname,
-                                       } },
-                                       target_image: { 's3_object': {
-                                         bucket: ENV['S3_BUCKETS_NAME'],
-                                         name: target_keyname,
-                                       } },
-                                       similarity_threshold: 1.0
-                                     })
-      response['face_matches'][0]['similarity']
-    rescue
-      0
-    end
-  end
-
-  # S3にuploadしローカルに一時的に保存した画像を削除する
-  def object_uploaded(file_name)
-    s3resoruce = Aws::S3::Resource.new(
-      access_key_id: ENV['ACCESS_KEY_ID'],
-      secret_access_key: ENV['SECRET_ACCESS_KEY'],
-      region: "ap-northeast-1",
-    )
-    local_file_path = '/myapp/images/' + file_name
-    s3resoruce.bucket(ENV['S3_BUCKETS_NAME']).object(file_name).upload_file(local_file_path)
-    File.delete(local_file_path)
-    file_name
-  end
-
-  def object_delete(file_name)
-    s3resoruce = Aws::S3::Resource.new(
-      access_key_id: ENV['ACCESS_KEY_ID'],
-      secret_access_key: ENV['SECRET_ACCESS_KEY'],
-      region: "ap-northeast-1",
-    )
-    s3resoruce.bucket(ENV['S3_BUCKETS_NAME']).object(file_name).delete
   end
 
   # userにいいねを行う
