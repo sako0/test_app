@@ -94,6 +94,18 @@
           "name": "LINE_OMIAI_CHANNEL_TOKEN"
         },
         {
+          "valueFrom": "LINE_OMIAI_SUGGEST_ID",
+          "name": "LINE_OMIAI_SUGGEST_ID"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_SUGGEST_SECRET",
+          "name": "LINE_OMIAI_SUGGEST_SECRET"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_SUGGEST_TOKEN",
+          "name": "LINE_OMIAI_SUGGEST_TOKEN"
+        },
+        {
           "valueFrom": "S3_BUCKETS_NAME",
           "name": "S3_BUCKETS_NAME"
         },
@@ -224,6 +236,18 @@
         {
           "valueFrom": "LINE_OMIAI_CHANNEL_TOKEN",
           "name": "LINE_OMIAI_CHANNEL_TOKEN"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_SUGGEST_ID",
+          "name": "LINE_OMIAI_SUGGEST_ID"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_SUGGEST_SECRET",
+          "name": "LINE_OMIAI_SUGGEST_SECRET"
+        },
+        {
+          "valueFrom": "LINE_OMIAI_SUGGEST_TOKEN",
+          "name": "LINE_OMIAI_SUGGEST_TOKEN"
         },
         {
           "valueFrom": "S3_BUCKETS_NAME",
