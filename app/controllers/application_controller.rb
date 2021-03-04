@@ -97,20 +97,20 @@ class ApplicationController < ActionController::Base
 
   def get_results(token)
     # 新規順を開く
-    sleep rand(7..13)
+    sleep rand(7..15)
     params_fresh = { omi_access_token: token.token, action_code: 'view', screen_code: 'search_fresh' }
     html_post("https://api2.omiai-jp.com/logging/action", "95", params_fresh)
     # おすすめ順を開く
-    sleep rand(7..13)
+    sleep rand(7..15)
     params_search = { omi_access_token: token.token, action_code: 'view', screen_code: 'search' }
     html_post("https://api2.omiai-jp.com/logging/action", "89", params_search)
     # ログイン順を一度リフレッシュ
-    sleep rand(7..13)
+    sleep rand(7..15)
     params_refresh = { omi_access_token: token.token, limit: '48' }
-    html_post("https://api2.omiai-jp.com/search/recommend", "62", params_refresh)
+    html_post("https://api2.omiai-jp.com/search/sort/login", "62", params_refresh)
     # ログイン順の結果を取得
-    sleep rand(10..20)
+    sleep rand(7..15)
     params_recommend = { omi_access_token: token.token, limit: '48', offset: '1' }
-    html_post('https://api2.omiai-jp.com/search/recommend/results', "71", params_recommend)
+    html_post('https://api2.omiai-jp.com/search/sort/login/results', "69", params_recommend)
   end
 end
