@@ -129,10 +129,10 @@ class Api::V1::OmiaiLikeController < ApplicationController
           if res_body['results']
             res_body['results'].each do |result|
               user_id = result['user_id']
-              if OmiaiUser.exists?(user_id: user_id)
+              if OmiaiLikedUser.exists?(user_id: user_id)
                 p result['nickname'] + "さんは既に画像判定をしたユーザです。スルーします。"
               else
-                OmiaiUser.create(user_id: user_id)
+                OmiaiLikedUser.create(user_id: user_id)
                 str = result['photograph_list'][0]['path']
                 image_url = str.gsub(/\u003d/, "=").gsub(/\u0026/, "&")
                 p image_url

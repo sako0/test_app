@@ -1,0 +1,2 @@
+class OmiaiLikedUser < ApplicationRecord
+end
