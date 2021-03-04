@@ -139,7 +139,7 @@ class Api::V1::OmiaiLikeController < ApplicationController
                 file_name = get_image(image_url, result['user_id'])
                 object_uploaded(file_name)
                 similar = compare_images(file_name, "target1.jpg")
-                if similar > 15
+                if similar > 10
                   similar_i = similar.to_i
                   similar_s = similar_i.to_s
                   s3_url = get_object_url(file_name)
