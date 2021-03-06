@@ -178,7 +178,7 @@ class Api::V1::TinderController < ApplicationController
       loop do
         begin
           random_int = rand(1..10)
-          push("めっちゃいい感じの人探してきますね") if random_int == 1
+          push("検索中") if random_int == 1
           res = http.get(uri.path, @api_headers)
           res_body = JSON.parse(res.body)
           if res_body['results']
@@ -196,7 +196,6 @@ class Api::V1::TinderController < ApplicationController
                 pass_user(result['_id'])
                 p "pass => " + result['_id']
               end
-              object_delete(file_name)
             end
             # 成功したため、iを初期化する
             i = 0
