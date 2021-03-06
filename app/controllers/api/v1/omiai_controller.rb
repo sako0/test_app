@@ -57,8 +57,8 @@ class Api::V1::OmiaiController < ApplicationController
       loop do
         begin
           token = OmiaiToken.find(1)
-          random_int = rand(1..10)
-          push("〜ちゃんと動作中〜") if random_int == 1
+          random_int = rand(1..100)
+          push("〜ちゃんと動作中〜") if random_int == 3
           res = get_results(token)
           res_body = JSON.parse(res.body)
           if res_body['results']
