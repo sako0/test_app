@@ -51,9 +51,9 @@ class Api::V1::TinderController < ApplicationController
       type: 'text',
       text: text
     }
-    user_id = "U54cf29dae250466e29bdb534ec020aa1"
+    user_id = ENV['LINE_TINDER_USER_1']
     client.push_message(user_id, message)
-    user_id2 = "U23de900058a2a8955f2d754dc3de886a"
+    user_id2 = ENV['LINE_TINDER_USER_2']
     client.push_message(user_id2, message)
   end
 
@@ -72,7 +72,7 @@ class Api::V1::TinderController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           if event['message']['text'] == "起動"
-            a = push"「起動」が押された！"
+            a = push "「起動」が押された！"
             p a
             index
             render json: :ok
@@ -93,7 +93,6 @@ class Api::V1::TinderController < ApplicationController
   # アクセストークンを取得する api/v1/tinder/new
   def new
     begin
-      push("アクセストークン取得処理を開始したよ！")
       facebook_url = "https://www.facebook.com/v3.2/dialog/oauth?redirect_uri=fb464891386855067%3A%2F%2Fauthorize%2F&scope=user_birthday%2Cuser_photos%2Cuser_education_history%2Cemail%2Cuser_relationship_details%2Cuser_friends%2Cuser_work_history%2Cuser_likes&response_type=token%2Csigned_request&client_id=464891386855067&ret=login&fallback_redirect_uri=221e1158-f2e9-1452-1a05-8983f99f7d6e&ext=1556057433&hash=Aea6jWwMP_tDMQ9y"
       start_scraping facebook_url do
         # ここにスクレイピングのコードを書く
@@ -155,10 +154,9 @@ class Api::V1::TinderController < ApplicationController
       res = http.request(req)
       api_response = JSON.parse(res.body)
       p api_response
-      push("Tinderのトークン取得完了！DBに保存しとくね")
       tinder_token = api_response['data']['api_token']
       Tinder.update(1, access_token: tinder_token)
-      push("あとは「起動」ボタンを押せばうまくいくはず！")
+      push("OK！あとは「起動」ボタンを押せばうまくいくはず！")
     rescue
       push("ごめん失敗！レイアウトの変更とかがあったかも、、")
     end
@@ -167,7 +165,6 @@ class Api::V1::TinderController < ApplicationController
   # 画像比較処理ループ api/v1/tinder
   def index
     begin
-      push("めっちゃいい感じの人探してきますね")
       i = 0
       @tinder = Tinder.find(1)
       uri = URI.parse('https://api.gotinder.com/user/recs')
@@ -180,41 +177,27 @@ class Api::V1::TinderController < ApplicationController
       http.use_ssl = true
       loop do
         begin
+          random_int = rand(1..10)
+          push("めっちゃいい感じの人探してきますね") if random_int == 1
           res = http.get(uri.path, @api_headers)
           res_body = JSON.parse(res.body)
           if res_body['results']
             res_body['results'].each do |result|
-              file_path = result['photos'][0]['processedFiles'][0]['url']
-              p "get_image前"
-              file_name = get_image(file_path, result['photos'][0]['id'])
-              p "object_uploaded前"
-              object_uploaded(file_name)
-              p "compare_images前"
-              similar = compare_images(file_name, "target1.jpg")
-              if similar > 20
-                # today = Date.today.strftime("%Y%m%d").to_i
-                # birth_date = Date.parse(result['birth_date']).strftime("%Y%m%d").to_i
-                # age_f = (today - birth_date) / 10000
-                # age = age_f.to_i
-                # if age < 29
-                #   like_user(result['_id'])
-                #   p "いいねしました => [" + result['_id'] + "] " + age.to_s + "歳"
-                p "like_user前"
+              today = Date.today.strftime("%Y%m%d").to_i
+              birth_date = Date.parse(result['birth_date']).strftime("%Y%m%d").to_i
+              age_f = (today - birth_date) / 10000
+              age = age_f.to_i
+              if age < 29
+                sleep rand(10..30)
                 like_user(result['_id'])
-                p "similar_i前"
-                similar_i = similar.to_i
-                p "条件に一致したためいいねしました => " + result['_id'] + "  マッチ率は" + similar_i.to_s + "%です"
-                push(result['name'] + "さんをいいねした！マッチ率は" + similar_i.to_s + "%だった！")
+                p "いいねしました => [" + result['_id'] + "] " + age.to_s + "歳"
               else
-                # else
-                #   pass_user(result['_id'])
-                #   p "pass => " + result['_id']
+                sleep rand(10..30)
                 pass_user(result['_id'])
                 p "pass => " + result['_id']
               end
               object_delete(file_name)
             end
-
             # 成功したため、iを初期化する
             i = 0
           else
@@ -235,7 +218,6 @@ class Api::V1::TinderController < ApplicationController
             retry
           else
             p i.to_s + "回処理が失敗しました。プログラムを終了します。"
-            push(i.to_s + "回処理が失敗しました。プログラムを終了します。")
             raise
           end
         end

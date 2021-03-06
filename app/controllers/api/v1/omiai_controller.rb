@@ -17,9 +17,9 @@ class Api::V1::OmiaiController < ApplicationController
       type: 'text',
       text: text
     }
-    user_id = "Ub23b7ec6629c7e2a1d118dd91c6580a5"
+    user_id = ENV['LINE_OMIAI_USER_1']
     client_omiai_foot.push_message(user_id, message)
-    user_id2 = "Ue07aae93ae84358fdc8a100c0b889ea3"
+    user_id2 = ENV['LINE_OMIAI_USER_2']
     client_omiai_foot.push_message(user_id2, message)
   end
 
@@ -53,12 +53,12 @@ class Api::V1::OmiaiController < ApplicationController
 
   def index
     begin
-      push("足跡たくさんつけてきますね！")
       i = 0
       loop do
         begin
           token = OmiaiToken.find(1)
-          push("〜ちゃんと動作中〜")
+          random_int = rand(1..10)
+          push("〜ちゃんと動作中〜") if random_int == 1
           res = get_results(token)
           res_body = JSON.parse(res.body)
           if res_body['results']
@@ -94,7 +94,6 @@ class Api::V1::OmiaiController < ApplicationController
             retry
           else
             p i.to_s + "回処理が失敗しました。プログラムを終了します。"
-            push(i.to_s + "回処理が失敗しました。プログラムを終了します。")
             raise
           end
         end

@@ -15,9 +15,9 @@ class Api::V1::OmiaiLikeController < ApplicationController
       type: 'text',
       text: text
     }
-    user_id = "U1193124d73215ce741b9c08b80f84ef5"
+    user_id = ENV['LINE_OMIAI_SUGGEST_USER_1']
     client.push_message(user_id, message)
-    user_id2 = "U3412fa03c2c730c1512cdffea0eb4be7"
+    user_id2 = ENV['LINE_OMIAI_SUGGEST_USER_2']
     client.push_message(user_id2, message)
   end
 
@@ -66,9 +66,9 @@ class Api::V1::OmiaiLikeController < ApplicationController
         ]
       }
     }
-    user_id = "U1193124d73215ce741b9c08b80f84ef5"
+    user_id = ENV['LINE_OMIAI_SUGGEST_USER_1']
     client.push_message(user_id, message)
-    user_id2 = "U3412fa03c2c730c1512cdffea0eb4be7"
+    user_id2 = ENV['LINE_OMIAI_SUGGEST_USER_2']
     client.push_message(user_id2, message)
   end
 
@@ -105,10 +105,8 @@ class Api::V1::OmiaiLikeController < ApplicationController
           object = JSON.load(event['postback']['data'])
           if object['method'] == "like"
             omiai_like(object['user_id'])
-            push object['user_name'] + "さんをlikeしました！"
           elsif object['method'] == "delete"
             object_delete(object['file_name'])
-            push object['user_name'] + "さんの画像をS3から削除しました"
           else
             push "何した？"
           end
@@ -119,7 +117,6 @@ class Api::V1::OmiaiLikeController < ApplicationController
 
   def index
     begin
-      push("いい人探してきますね！！")
       i = 0
       loop do
         begin
@@ -171,7 +168,6 @@ class Api::V1::OmiaiLikeController < ApplicationController
             retry
           else
             p i.to_s + "回処理が失敗しました。プログラムを終了します。"
-            push(i.to_s + "回処理が失敗しました。プログラムを終了します。")
             raise
           end
         end
