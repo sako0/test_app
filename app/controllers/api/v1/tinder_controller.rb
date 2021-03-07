@@ -177,8 +177,6 @@ class Api::V1::TinderController < ApplicationController
       http.use_ssl = true
       loop do
         begin
-          random_int = rand(1..100)
-          push("検索中") if random_int == 3
           res = http.get(uri.path, @api_headers)
           res_body = JSON.parse(res.body)
           if res_body['results']
@@ -191,6 +189,8 @@ class Api::V1::TinderController < ApplicationController
                 sleep rand(10..30)
                 like_user(result['_id'])
                 p "いいねしました => [" + result['_id'] + "] " + age.to_s + "歳"
+                random_int = rand(1..50)
+                push("検索中") if random_int == 1
               else
                 sleep rand(10..30)
                 pass_user(result['_id'])

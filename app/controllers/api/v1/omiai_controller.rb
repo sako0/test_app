@@ -57,8 +57,6 @@ class Api::V1::OmiaiController < ApplicationController
       loop do
         begin
           token = OmiaiToken.find(1)
-          random_int = rand(1..100)
-          push("〜ちゃんと動作中〜") if random_int == 3
           res = get_results(token)
           res_body = JSON.parse(res.body)
           if res_body['results']
@@ -72,6 +70,8 @@ class Api::V1::OmiaiController < ApplicationController
                 sleep rand(7..60)
                 html_post("https://api2.omiai-jp.com/footprint/leave", "95", params_footprint)
                 p result['nickname'] + "さんに足跡をつけました"
+                random_int = rand(1..30)
+                push("〜ちゃんと動作中〜") if random_int == 1
               end
             end
             # 成功したため、iを初期化する
