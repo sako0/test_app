@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   post '/callback' => 'api/v1/tinder#callback'
   post '/omiai/callback' => 'api/v1/omiai#callback'
   post '/omiai_suggest/callback' => 'api/v1/omiai_like#callback'
+  post '/pairs_suggest/callback' => 'api/v1/pairs_like#callback'
 end

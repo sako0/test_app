@@ -1,0 +1,2 @@
+class PairsToken < ApplicationRecord
+end

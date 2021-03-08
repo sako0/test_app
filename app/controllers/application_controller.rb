@@ -95,6 +95,54 @@ class ApplicationController < ActionController::Base
     res
   end
 
+  def pairs_post(url, header_length, data)
+    token = PairsToken.find(1)
+    api_headers = {
+      'accept' => '*/*',
+      'Content-type' => 'application/json',
+      'pairs-token' => token.token,
+      'accept-encoding' => 'br;q=1.0, gzip;q=0.9, deflate;q=0.8',
+      'User-agent' => 'Pairs_JP/156.1.0 (jp.eure.pairs; build:37006716.1; iOS 14.4.0) Alamofire/5.2.2',
+      'accept-language' => 'ja-JP;q=1.0',
+      'x-client-version' => '156.1.0',
+      'x-client-device' => 'ios',
+      'x-client-sdk-version' => '1774.101'
+    }
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    req = Net::HTTP::Post.new(uri.request_uri)
+    req.body = data
+    req.initialize_http_header(api_headers)
+    res = http.request(req)
+    p res
+    res
+  end
+
+  def pairs_get(url)
+    token = PairsToken.find(1)
+    api_headers = {
+      'Accept' => '*/*',
+      'Content-type' => 'application/json',
+      'pairs-token' => token.token,
+      'accept-encoding' => 'br;q=1.0, gzip;q=0.9, deflate;q=0.8',
+      'user-agent' => 'Pairs_JP/156.2.0 (jp.eure.pairs; build:37006716.1; iOS 14.4.0) Alamofire/5.2.2',
+      'accept-language' => 'ja-JP;q=1.0',
+      'x-client-version' => '156.2.0',
+      'x-client-device' => 'ios',
+      'x-client-sdk-version' => '1774.101'
+    }
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    req = Net::HTTP::Get.new(uri.request_uri)
+    req.initialize_http_header(api_headers)
+    response = http.request(req)
+    res_body = JSON.parse(response.body)
+    p res_body
+    res_body
+  end
+
   def get_results(token)
     # 新規順を開く
     sleep rand(7..15)

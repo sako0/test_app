@@ -130,6 +130,26 @@
           "name": "LINE_OMIAI_SUGGEST_USER_2"
         },
         {
+          "valueFrom": "LINE_PAIRS_SUGGEST_ID",
+          "name": "LINE_PAIRS_SUGGEST_ID"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_SECRET",
+          "name": "LINE_PAIRS_SUGGEST_SECRET"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_TOKEN",
+          "name": "LINE_PAIRS_SUGGEST_TOKEN"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_USER_1",
+          "name": "LINE_PAIRS_SUGGEST_USER_1"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_USER_2",
+          "name": "LINE_PAIRS_SUGGEST_USER_2"
+        },
+        {
           "valueFrom": "S3_BUCKETS_NAME",
           "name": "S3_BUCKETS_NAME"
         },
@@ -296,6 +316,26 @@
         {
           "valueFrom": "LINE_OMIAI_SUGGEST_USER_2",
           "name": "LINE_OMIAI_SUGGEST_USER_2"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_ID",
+          "name": "LINE_PAIRS_SUGGEST_ID"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_SECRET",
+          "name": "LINE_PAIRS_SUGGEST_SECRET"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_TOKEN",
+          "name": "LINE_PAIRS_SUGGEST_TOKEN"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_USER_1",
+          "name": "LINE_PAIRS_SUGGEST_USER_1"
+        },
+        {
+          "valueFrom": "LINE_PAIRS_SUGGEST_USER_2",
+          "name": "LINE_PAIRS_SUGGEST_USER_2"
         },
         {
           "valueFrom": "S3_BUCKETS_NAME",

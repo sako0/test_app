@@ -1,0 +1,2 @@
+class PairsLikedUser < ApplicationRecord
+end
